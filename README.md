@@ -15,3 +15,12 @@ python3 podcast_from_rss.py
 python3 podcast_from_rss.py 'file_name.txt'
 ```
 
+
+#### Output
+
+
+Following folders with JSON files will be created:
+
+
+- ki_json
+- original_json
