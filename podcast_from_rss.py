@@ -4,6 +4,7 @@ import re
 import requests
 from sys import argv, exit
 import xmltodict
+from pathlib import Path
 
 from feedurls import get_feedurls, get_podcastlist
 from transform_for_db import transform_rss_item
