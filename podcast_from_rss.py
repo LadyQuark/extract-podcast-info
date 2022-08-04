@@ -99,8 +99,7 @@ def create_json_file(folder, name, source_dict, failed):
         # Create valid file name
         filename = f"{get_valid_filename(name)}.json"
         # Create folder if does not already exist
-        if folder != "" and not os.path.exists(folder):
-            os.makedirs(folder)
+        Path(folder).mkdir(parents=True, exist_ok=True)
         # Join folder and filename
         filepath = os.path.join(folder, filename)
     except Exception as e:
