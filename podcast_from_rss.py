@@ -86,9 +86,10 @@ def main():
         )
     
     # Create json file for `failed`
-    create_json_file(
-        folder="", name="failed", source_dict=failed, failed=failed
-    )
+    if len(failed) > 0:
+        create_json_file(
+            folder="", name="failed", source_dict=failed, failed=failed
+        )
 
 
 def create_json_file(folder, name, source_dict, failed):
