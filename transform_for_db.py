@@ -40,7 +40,8 @@ def standard_duration(audio_length):
     
 
 def timestamp_ms():
-    return int(datetime.now().timestamp() * 1000)
+    utc_time = datetime.utcnow()
+    return int(utc_time.timestamp() * 1000)
 
 
 def transform_rss_item(episode, header):
