@@ -1,7 +1,6 @@
 from datetime import datetime
 from dateutil.parser import parse
 import json
-import time
 
 DEFAULT_VALUES = {
     'permission': "Global",
@@ -41,7 +40,7 @@ def standard_duration(audio_length):
     
 
 def timestamp_ms():
-    return int( time.time_ns() / 1000 )
+    return int(datetime.now().timestamp() * 1000)
 
 
 def transform_rss_item(episode, header):
