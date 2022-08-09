@@ -26,13 +26,14 @@ def main():
     feeds = get_feedurls(podcast_list)
 
     failed = {}
+    num_feeds = len(feeds)
 
-    for name in feeds:
+    for n, name in enumerate(feeds):
 
         # Get RSS feed from URL
         url = feeds[name]
         try:
-            print(f"Trying to get rss for {name}")
+            print(f"{n + 1}/{num_feeds}: Getting RSS feed for {name}")
             response = requests.get(url)
             response.raise_for_status()
         except requests.RequestException:
