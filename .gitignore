@@ -231,3 +231,4 @@ ki_json/
 original_json/
 xml/
 scratch/
+failed*.json
