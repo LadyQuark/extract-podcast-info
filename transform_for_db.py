@@ -73,13 +73,13 @@ def transform_rss_item(episode, header):
             'original': [episode], 
             'publishedDate': standard_date(episode.get('pubDate'))
         }
-    except KeyError as e:
+    except (KeyError, TypeError) as e:
         print(e)
         # Convert `episode` dict to JSON formatted string
         json_string = json.dumps(episode, indent=4)
         # Write to JSON file
         with open('failed_episode.json', 'w') as file:
             file.write(json_string)
-        return None
+        raise Exception("Key Error / Type Error")
 
     return db_item

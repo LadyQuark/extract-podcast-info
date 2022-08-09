@@ -73,13 +73,13 @@ def main():
         # Loop through each dict representing episode in list `item`
         for item in data_dict["item"]:
             # Convert into structured dict
-            episode = transform_rss_item(item, header)
-            if not episode:
-                print(f"Failed to transform data for {name}. See failed_episode.json")
-                failed[name] = f"Failed to transform data for {name}"
-                continue
-            # Append to list `episodes`
-            episodes.append(episode)
+            try:
+                episode = transform_rss_item(item, header)
+            except Exception as e:
+                    print(f"Failed to transform data for {name}. See failed_episode.json")
+                    failed[name] = f"Failed to transform data"
+            else:
+                episodes.append(episode)
         
         # Create json file for transformed episodes in folder `ki_json`
         create_json_file(
