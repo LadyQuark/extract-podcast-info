@@ -1,6 +1,7 @@
 from datetime import datetime
 from dateutil.parser import parse
 import json
+import re
 
 DEFAULT_VALUES = {
     'permission': "Global",
@@ -12,6 +13,9 @@ DEFAULT_VALUES = {
     'updated': "",
     'isDeleted': False,
 }
+RE_TAG = re.compile('<.*?>')
+RE_SPACE_TAG = re.compile('&nbsp;')
+RE_EOL_TAG = re.compile('</p>|(<br>)+|(<br/>)+|(&#13;)+')
 
 def standard_date(pub_date):
     if pub_date:
@@ -44,12 +48,22 @@ def timestamp_ms():
     return int(utc_time.timestamp() * 1000)
 
 
+def remove_html_tags(raw_html):
+    if not isinstance(raw_html, str):
+        return raw_html
+    
+    temp = re.sub(RE_EOL_TAG, '\n', raw_html)
+    temp = re.sub(RE_SPACE_TAG, " ", temp)
+    clean_text = re.sub(RE_TAG, '', temp)
+    return clean_text
+
+
 def transform_rss_item(episode, header):
     try:
         db_item = {
             'title': episode.get('title'), 
             'thumbnail': episode.get('itunes:image').get('@href') if episode.get('itunes:image') else None, 
-            'description': episode.get('description'), 
+            'description': remove_html_tags(episode.get('description', "")), 
             'permission': DEFAULT_VALUES['permission'], 
             'authors': [episode.get('itunes:author')] if episode.get('itunes:author') else header['authors'], 
             'mediaType': DEFAULT_VALUES['mediaType'], 
