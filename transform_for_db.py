@@ -2,6 +2,7 @@ from datetime import datetime
 from dateutil.parser import parse
 import json
 import re
+from html import unescape
 
 DEFAULT_VALUES = {
     'permission': "Global",
@@ -15,7 +16,7 @@ DEFAULT_VALUES = {
 }
 RE_TAG = re.compile('<.*?>')
 RE_SPACE_TAG = re.compile('&nbsp;')
-RE_EOL_TAG = re.compile('</p>|(<br>)+|(<br/>)+|(&#13;)+')
+RE_EOL_TAG = re.compile('</p>|(<br>)+|(<br/>)+')
 
 def standard_date(pub_date):
     if pub_date:
@@ -48,13 +49,14 @@ def timestamp_ms():
     return int(utc_time.timestamp() * 1000)
 
 
-def remove_html_tags(raw_html):
+def clean_html(raw_html):
     if not isinstance(raw_html, str):
         return raw_html
     
     temp = re.sub(RE_EOL_TAG, '\n', raw_html)
     temp = re.sub(RE_SPACE_TAG, " ", temp)
-    clean_text = re.sub(RE_TAG, '', temp)
+    temp = re.sub(RE_TAG, '', temp)
+    clean_text = unescape(temp)
     return clean_text
 
 
@@ -63,7 +65,7 @@ def transform_rss_item(episode, header):
         db_item = {
             'title': episode.get('title'), 
             'thumbnail': episode.get('itunes:image').get('@href') if episode.get('itunes:image') else None, 
-            'description': remove_html_tags(episode.get('description', "")), 
+            'description': clean_html(episode.get('description', "")), 
             'permission': DEFAULT_VALUES['permission'], 
             'authors': [episode.get('itunes:author')] if episode.get('itunes:author') else header['authors'], 
             'mediaType': DEFAULT_VALUES['mediaType'], 
